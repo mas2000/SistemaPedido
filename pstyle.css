@@ -1,0 +1,170 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+
+/* Estilos para todos los dispositivos */
+body {
+  font-family:"Segoe UI", "Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+  display: flex;
+  background-size: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  background-position: 0 0, 10px 10px;
+  background: linear-gradient(40deg, #fff, #285591 );
+
+}
+
+
+.form
+{
+  
+  background-color: #ece7e7;
+  margin: auto;
+  width: 100%;
+  max-width: 400px;
+  padding: 4.5em 3em;
+  border-radius: 10px;
+  box-shadow: 0 5px 10px -2px rgb(0 0 0 / 30%);
+  text-align: center;
+}
+#seccion-1 {
+  margin-bottom: 20px;
+}
+
+.form img
+{
+    max-width: 30%;
+}
+
+label {
+  display: block;
+  color: black;
+  margin-bottom: 10px;
+}
+
+select, textarea {
+  padding: 6px;
+  font-size: 16px;
+  border-radius: 12px;
+  border-color: black;
+  margin-bottom: 10px;
+}
+
+input[type="date"] {
+  padding: 5px 132px;
+  font-size: 16px;
+  border-radius: 12px;
+  border-color: black;
+  margin-bottom: 10px;
+}
+
+select {
+  text-align: center;
+  width: 100%;
+}
+
+#btn-anterior,
+#btn-siguiente,
+#btn-anterior1,
+#btn-anterior2,
+#btn-siguiente1,
+#btn-pedido,
+#btn-agregar,
+#btn-final {
+  background-color: #1a2d99;
+  color: white;
+  padding: 10px 20px;
+  border-color: black;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 6px auto;
+  display: block;
+  text-align: center;
+  transition: all 0.3s ease-in-out;
+}
+
+
+#btn-siguiente1:disabled:hover,
+#btn-siguiente:disabled:hover,
+#btn-agregar:disabled:hover,
+button[disabled]{
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #000000;
+}
+
+
+.btn1 {
+
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 10px auto;
+  display: block;
+  text-align: center;
+  width: 98px;
+}
+
+#btn-anterior:hover,
+#btn-siguiente:hover,
+#btn-anterior1:hover,
+#btn-anterior2:hover,
+#btn-siguiente1:hover,
+#btn-pedido:hover,
+#btn-agregar:hover,
+#btn-final:hover {
+	background-color: #2a2c3a;
+	box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
+
+}
+
+table {
+  border-collapse: collapse;
+  margin: 0 auto;
+}
+
+th, td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Estilos para dispositivos móviles */
+@media screen and (max-width: 600px) {
+  select, input[type="date"], textarea {
+    font-size: 14px;
+  }
+
+  label {
+    font-size: 16px;
+  }
+
+  #seccion-1 {
+    margin-bottom: 10px;
+  }
+
+  #btn-anterior,
+  #btn-siguiente,
+  #btn-anterior1,
+  #btn-siguiente1,
+  #btn-pedido,
+  #btn-agregar,
+  #btn-final {
+    font-size: 14px;
+    padding: 8px 16px;
+    margin: 5px auto;
+  }
+
+  .btn1 {
+    font-size: 14px;
+    padding: 8px 16px;
+    margin: 5px auto;
+    width: 150px;
+  }
+
+  th, td {
+    font-size: 14px;
+  }
+}

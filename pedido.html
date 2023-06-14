@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="pstyle.css">
+    <title>Nuevo Pedido</title>
+</head>
+
+<body>
+                    <!--            Formulario               -->
+    <div class="form">
+
+    <form id="formulario">
+    <div id="seccion-1">
+        <img src="logo.png" alt="">
+        <label for="lista">Cliente:</label>
+        <select id="cliente" name="cliente" required>
+            <option value=""></option>
+            <option value="1 - Cliente">1 - Cliente</option>
+            <option value="2 - Cliente">2 - Cliente</option>
+            <option value="3 - Cliente">3 - Cliente</option>
+            <option value="4 - Cliente">4 - Cliente</option>
+        </select>
+        <br>
+        <label for="calendario">Fecha de entrega:</label>
+        <input type="date" id="calendario" name="calendario" required>
+        <br>
+        <label for="lista">Domicilio de entrega:</label>
+        <select id="domicilio" name="domicilio" required>
+            <option value=""></option>
+            <option value="1 - Sucursal">1 - Sucursal</option>
+            <option value="2 - Sucursal">2 - Sucursal</option>
+            <option value="3 - Sucursal">3 - Sucursal</option>
+            <option value="4 - Sucursal">3 - Sucursal</option>
+        </select>
+    </div>
+    <a href="menu.html"><button type="button" id="btn-anterior">Anterior</button><br></a>
+    <button class="btn1" type="button" id="btn-siguiente" disabled>Siguiente</button>
+    </form>
+    <div>
+
+                  <!--            Tabla               -->
+
+        <button style="display: none;" id="btn-anterior1">Anterior</button>
+        <button style="display: none;" id="btn-siguiente1" disabled>Siguiente</button>
+        <button style="display: none;" id="btn-pedido">Agregar Producto</button>
+        
+	<table id="tabla" style="display: none;">
+        
+		<thead>
+			<tr>
+				<th>Codigo                      Descripcion</th>
+                <th>Cantidad</th>             
+                <th>Precio</th> 
+                <th>Accion</th> 
+			</tr>
+		</thead>
+		<tbody id="tabla-body">
+		</tbody>
+	</table>
+
+</div>
+
+	<form class="formtable" onsubmit="agregarElemento(); return false;" id="formulario1" style="display: none;">
+        <button style="display: none;" id="btn-anterior2">Anterior</button>
+
+		<label for="codigo">Codigo:</label>
+		<!--<input type="number" id="pedido" name="pedido" required>-->
+        <select id="codigo" name="codigo" required><br>
+            <option value=""></option>
+            <option value="1 - Pedido">1 - Pedido</option>
+            <option value="2 - Pedido">2 - Pedido</option>
+            <option value="3 - Pedido">3 - Pedido</option>
+            <option value="4 - Pedido">4 - Pedido</option>
+        </select>
+
+<!--
+        <label for="descripcion">Descripcion:</label>
+		<input type="text" id="descripcion" name="descripcion" required><br>
+     -->
+
+        <label for="cantidad">Cantidad por KG:</label>
+		<input type="number" id="cantidad" name="cantidad" required><br>
+
+        <label for="precio">Precio:</label>
+		<input type="number" id="precio" name="precio" required><br>
+
+		<button type="submit" id="btn-agregar">Agregar</button><br>
+	</form>
+<br>
+
+                    <!--            Formulario               -->
+
+    <form id="formulario3" style="display: none;">
+        <button style="display: none;" id="btn-anterior3">Anterior</button>
+        <div id="seccion-final">
+            <label for="ultimadata">Numero de referencia externa:</label>
+            <input type="number" id="ultimadata" name="ultimadata" required>
+
+            <br>
+            <label for="comentarios">Observaciones:</label>
+			<textarea id="comentarios" name="comentarios"></textarea>
+			<br>
+
+            <input type="checkbox">Dato adicional
+
+        </div>
+        <button type="button" id="btn-final" disabled>Finalizar</button>
+        </form>
+
+        <div class="overlay" style="display: none;" id="finalizado">
+           <h1> Su pedido ha sido finalizado</h1>
+            <a href="menu.html"><button id="btn-finalizado">Volver</button></a>
+        </div>
+    </div>
+
+
+
+    <script>
+    //-- --------------------          Javascript       -------------------------- //
+    // -------- -- -- -- -- -- -- -- 1er Formulario -- -- -- -- -- -- --  -------- //
+
+
+    
+    //Calendario
+        
+    var date = new Date();
+    var year = date.getFullYear();
+    var month = String(date.getMonth()+1).padStart(2,'0');
+    var todayDate = String(date.getDate()+4).padStart(2,'0');
+    var datePattern = year + '-' + month + '-' + todayDate;
+    document.getElementById("calendario").value = datePattern;
+
+    //Elementos
+
+	const form = document.getElementById('formulario');
+    const tabla = document.getElementById('tabla');
+	const seccion1 = document.getElementById('seccion-1');
+	const cliente = document.getElementById('cliente');
+	const calendario = document.getElementById('calendario');
+    const domicilio = document.getElementById('domicilio');
+    const btnAnterior00 = document.getElementById('btn-anterior');
+    const btnAnterior01 = document.getElementById('btn-anterior1');
+    const btnAnterior02 = document.getElementById('btn-anterior2');
+    const btnAnterior03 = document.getElementById('btn-anterior3');
+    const btnPedido = document.getElementById('btn-pedido');
+	const btnSiguiente00 = document.getElementById('btn-siguiente');
+    const btnSiguiente01 = document.getElementById('btn-siguiente1');
+
+
+    //Deshabilitar "Siguiente"
+
+    btnSiguiente00.disabled = true;
+
+    // Habilitar el botón "Siguiente" cuando se completen todos los campos requeridos
+		
+    form.addEventListener('input', () => {
+			if (cliente.validity.valid && calendario.validity.valid && domicilio.validity.valid) {
+				btnSiguiente00.disabled = false;
+			} else {
+				btnSiguiente00.disabled = true;
+			}
+		});
+
+        btnPedido.addEventListener('click', () => {
+            btnAnterior00.style.display = 'none';
+            btnAnterior01.style.display = 'none';
+            btnPedido.style.display = 'none';
+			btnSiguiente00.style.display = 'none';
+            btnSiguiente01.style.display = 'none';
+			seccion1.style.display = 'none';
+            tabla.style.display = 'none';
+            btnAnterior02.style.display = 'block';
+			formulario.style.display = 'block';
+
+		});
+
+        btnSiguiente00.addEventListener('click', () => {
+            btnAnterior00.style.display = 'none';
+            btnAnterior01.style.display = 'block';
+			seccion1.style.display = 'none';
+            tabla.style.display = 'block';
+			formulario.style.display = 'none';
+            btnPedido.style.display = 'block';
+			btnSiguiente00.style.display = 'none';
+            btnSiguiente01.style.display = 'block';
+		});
+
+
+
+    // -------- -- -- -- -- -- -- -- Final 1er Formulario -- -- -- -- -- -- --  -------- //
+
+
+
+    // -------- -- -- -- -- -- -- -- 2do Formulario + Tabla -- -- -- -- -- -- --  -------- //
+
+    function agregarElemento() {
+            // Obtenemos el valor de los campos del formulario
+            var codigo = document.getElementById("codigo").value;
+            var cantidad = document.getElementById("cantidad").value;
+            var precio = document.getElementById("precio").value;
+    
+            // Creamos un nuevo elemento "tr"
+            var fila = document.createElement("tr");
+    
+            // Creamos un nuevo elemento "td" para cada campo del formulario
+            var celdaCodigo = document.createElement("td");
+            var celdaCantidad = document.createElement("td");
+            var celdaPrecio = document.createElement("td");
+    
+            // Asignamos los valores de los campos del formulario a las celdas correspondientes
+            celdaCodigo.textContent = codigo;
+            celdaCantidad.textContent = cantidad;
+            celdaPrecio.textContent = precio;
+    
+            // Creamos un nuevo elemento "td" para el botón de eliminación
+            var celdaEliminar = document.createElement("td");
+    
+            // Creamos un nuevo botón
+            var botonEliminar = document.createElement("button");
+    
+            // Asignamos un texto al botón
+            botonEliminar.textContent = "Eliminar";
+    
+            // Agregamos un evento "click" al botón para eliminar la fila
+            botonEliminar.addEventListener("click", function() {
+                fila.parentNode.removeChild(fila);
+                actualizarBotonSiguiente1();
+            });
+    
+            // Agregamos el botón de eliminación a la celda correspondiente
+            celdaEliminar.appendChild(botonEliminar);
+    
+            // Agregamos las celdas a la fila
+            fila.appendChild(celdaCodigo);
+            fila.appendChild(celdaCantidad);
+            fila.appendChild(celdaPrecio);
+            fila.appendChild(celdaEliminar);
+    
+            // Agregamos la fila a la tabla
+            document.getElementById("tabla-body").appendChild(fila);
+    
+            // Limpiamos los campos del formulario
+            document.getElementById("codigo").value = "";
+            document.getElementById("cantidad").value = "";
+            document.getElementById("precio").value = "";
+    
+            // Deseleccionamos el botón de agregar
+            document.getElementById("btn-agregar").disabled = true;
+            actualizarBotonSiguiente1();
+        }
+    
+    function actualizarBotonSiguiente1() {
+            var botonSiguiente1 = document.getElementById("btn-siguiente1");
+            var tabla = document.getElementById("tabla-body");
+
+            if (tabla.children.length > 0) {
+                botonSiguiente1.disabled = false;
+            } else {
+             botonSiguiente1.disabled = true;
+         }
+        }
+
+
+        // Obtenemos los elementos del formulario y el botón de agregar
+        const formulario = document.getElementById("formulario1");
+        const codigo = document.getElementById("codigo");
+        const cantidad = document.getElementById("cantidad");
+        const precio = document.getElementById("precio");
+        const btnAgregar = document.getElementById("btn-agregar");
+    
+        // Deshabilitamos el botón de agregar al inicio
+        btnAgregar.disabled = true;
+    
+        // Agregamos un listener al formulario para habilitar o deshabilitar el botón de agregar según la validez de los campos del formulario
+        formulario.addEventListener("input", function() {
+            if (codigo.validity.valid && cantidad.validity.valid && precio.validity.valid) {
+                btnAgregar.disabled = false;
+            } else {
+                btnAgregar.disabled = true;
+            }
+        });
+
+        btnAgregar.addEventListener('click', () => {
+            btnAnterior01.style.display = 'block';
+            btnSiguiente01.style.display = 'block';
+            btnPedido.style.display = 'block';
+            tabla.style.display = 'block';
+            formulario.style.display = 'none';
+
+        })
+
+            btnAnterior01.addEventListener('click', () => {
+            btnAnterior00.style.display = 'block'
+            btnSiguiente00.style.display = 'block';
+			seccion1.style.display = 'block';
+            tabla.style.display = 'none';
+			formulario.style.display = 'none';
+            btnAnterior01.style.display = 'none';
+            btnSiguiente01.style.display = 'none';
+            btnPedido.style.display = 'none';
+		});
+
+
+            btnSiguiente01.addEventListener('click', () => {
+            tabla.style.display = 'none';
+			formulario.style.display = 'none';
+            btnAnterior03.style.display = 'block'; 
+            form3.style.display= 'block';
+            btnAnterior01.style.display = 'none';
+            btnSiguiente01.style.display = 'none';
+            btnPedido.style.display = 'none';
+            btnFinalizado.style.display = 'none'
+        })
+
+
+        // Agregamos un listener al botón de siguiente para mostrar un mensaje en la consola
+        btnSiguiente01.addEventListener("click", function() {
+            console.log("Botón Siguiente presionado.");
+}       );
+
+
+        
+    // -------- -- -- -- -- -- -- -- Fin 2do Formulario + Tabla -- -- -- -- -- -- --  -------- //
+
+
+        // -------- -- -- -- -- -- -- -- 3er Formulario -- -- -- -- -- -- --  -------- //
+
+    
+    //Elementos
+
+	const form3 = document.getElementById('formulario3');
+	const seccion2 = document.getElementById('seccion-final');
+    const ultimadata = document.getElementById('ultimadata');
+	const comentarios = document.getElementById('comentarios');
+	const btnFinal = document.getElementById('btn-final');
+    const btnFinalizado = document.getElementById('finalizado');
+
+
+    
+    btnAnterior02.addEventListener('click', () => {
+            tabla.style.display = 'block';
+			formulario.style.display = 'none';
+            form3.style.display= 'none';
+            btnAnterior01.style.display = 'block';
+            btnSiguiente01.style.display = 'block';
+            btnAnterior02.style.display= 'none';
+            btnPedido.style.display = 'block';
+        })
+
+    // Volver a la tabla
+    
+    btnAnterior03.addEventListener('click', () => {
+            tabla.style.display = 'block';
+			formulario.style.display = 'none';
+            form3.style.display= 'none';
+            btnAnterior01.style.display = 'block';
+            btnSiguiente01.style.display = 'block';
+            btnAnterior02.style.display= 'none';
+            btnPedido.style.display = 'block';
+        })
+
+    //Deshabilitar "Finalizar"
+
+    btnFinal.disabled = true;
+
+    // Habilitar el botón "Finalizar" cuando se completen todos los campos requeridos
+		
+    form3.addEventListener('input', () => {
+			if (ultimadata.validity.valid && comentarios.validity.valid ) {
+				btnFinal.disabled = false;
+			} else {
+				btnFinal.disabled = true;
+			}
+		});
+
+        // Ventana de finalizacion
+        btnFinal.addEventListener('click', () => {
+            btnFinalizado.style.display = 'block';
+            tabla.style.display = 'none';
+			formulario.style.display = 'none';
+            form3.style.display= 'none';
+            btnAnterior01.style.display = 'none';
+            btnSiguiente01.style.display = 'none';
+            btnAnterior02.style.display= 'none';
+            btnPedido.style.display = 'none';
+        })
+
+
+    </script>
+</body>
+</html>
